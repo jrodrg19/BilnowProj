@@ -135,8 +135,6 @@ public class Reserva {
 
 		carrito=new Producto[carro_compra.getTamanio()];
 
-		productos_Tienda=new Producto[gestionar.getNumProductos()];
-
 		productos_Tienda= gestionar.getProductos();
 
 		if(productos_Tienda.length%3==0) {

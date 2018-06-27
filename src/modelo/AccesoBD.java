@@ -4,12 +4,25 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import modeloBD.Cita;
+import modeloBD.Mascota;
+import modeloBD.Productos;
+import modeloBD.Productosreservados;
+import modeloBD.Usuario;
 
 /**
  * 
@@ -21,6 +34,8 @@ public class AccesoBD {
 	private Statement declaracion;
 
 	private ResultSet datos;
+	
+	private Session session;
 
 
 	/**
@@ -48,21 +63,50 @@ public class AccesoBD {
 
 	/**
 	 * 
-	 * @return
+	 * @param fileName
 	 */
-	public ResultSet getUsuaioBD(String id_Usuario){
-
-
+	public static void backupBD(File fileName) {
+	
 		try {
+			String rutaMySqlDump = "C:\\Archivos de programa\\MySQL\\MySQL Server 5.0\\bin\\mysqldump.exe";
+			String contrasenia ="";
+			String usuario = "root";
+			String dataBase = "bilnow_db";
+	
+			String cad = "\"" + rutaMySqlDump + "\" --opt --password=" + contrasenia + " --user=" + usuario + " " + dataBase + " > \"" + fileName.getAbsolutePath()+".sql" +"\"\n";
+	
+	
+			File fcopi = new File("copia_seguridad.bat");
+			FileWriter fw = new FileWriter(fcopi);
+			fw.write(cad, 0, cad.length());
+			fw.close();
+			Runtime.getRuntime().exec("copia_Seguridad.bat");
+	
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	
+	}
 
-			datos=declaracion.executeQuery("SELECT * FROM usuario where id_Usuario='"+id_Usuario+"';");
 
+	public boolean estaLibreHora(Date cita_Fecha, String hora) {
+	
+		boolean esta=false;
+	
+		try {
+			datos=declaracion.executeQuery("Select * from `cita` where `fecha_cita` = '"+new java.sql.Date(cita_Fecha.getTime())+"' and `hora_Cita` = '"+hora+"';");
+	
+			if(datos.next()==false) {
+				esta=true;
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return datos;
+	
+		return esta;
 	}
 
 
@@ -70,22 +114,48 @@ public class AccesoBD {
 	 * 
 	 * @return
 	 */
-	public ResultSet getProductosBD(){
+	@SuppressWarnings("unused")
+	public Usuario getUsuaioBD(String id_Usuario){
+
+		
+		  session = HibernateConection.getSessionFactoru().openSession();
+		  Usuario user=null;
+	      Transaction tx = null;
+	      try {
+	    	  user = (Usuario) session.createQuery("from Usuario where id_Usuario='"+id_Usuario+"'").uniqueResult();
+	      } catch (HibernateException e) {
+	         if (tx!=null) tx.rollback();
+	         e.printStackTrace(); 
+	      } finally {
+	         session.close(); 
+	      }
+	      return user;
+		
+	}
 
 
-		try {
+	/**
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Productos> getProductosBD(){
 
-			datos=declaracion.executeQuery("SELECT * FROM `productos`;");
-
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-
-		}
-
-		return datos;
-
+		List<Productos> prodAlm=null;
+		session = HibernateConection.getSessionFactoru().openSession();
+	      Transaction tx = null;
+	      try {
+	         tx = session.beginTransaction();
+	         prodAlm = session.createQuery("from Productos").list(); 
+	         tx.commit();
+	      } catch (HibernateException e) {
+	         if (tx!=null) tx.rollback();
+	         e.printStackTrace(); 
+	      } finally {
+	         session.close(); 
+	      }
+	      return prodAlm;
+		
 	}
 
 
@@ -105,7 +175,6 @@ public class AccesoBD {
 		return datos;
 	}
 
-
 	/**
 	 * 
 	 * @param id_Mascota 
@@ -113,7 +182,7 @@ public class AccesoBD {
 	 */
 	public ResultSet getNumCitasBD(String id_Mascota) {
 		// TODO Auto-generated method stub
-
+		
 		try {
 			datos=declaracion.executeQuery("SELECT count(*) from cita where id_Mascota ='"+id_Mascota+"';");
 		} catch (SQLException e) {
@@ -131,18 +200,24 @@ public class AccesoBD {
 	 * @return 
 	 * 
 	 */
-	public ResultSet getCitasMascotaBD(String id_Mascota) {
+	@SuppressWarnings("unchecked")
+	public List<Cita> getCitasMascotaBD(String id_Mascota) {
 
-		try {
-
-			datos=declaracion.executeQuery("SELECT * FROM `cita` WHERE `id_Mascota` = '"+id_Mascota+"'");
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return datos;
+		List<Cita> citasMasc=null;
+		session = HibernateConection.getSessionFactoru().openSession();
+	      Transaction tx = null;
+	      try {
+	         tx = session.beginTransaction();
+	         citasMasc = session.createQuery("from Cita where id_mascota='"+id_Mascota+"'").list(); 
+	         tx.commit();
+	      } catch (HibernateException e) {
+	         if (tx!=null) tx.rollback();
+	         e.printStackTrace(); 
+	      } finally {
+	         session.close(); 
+	      }
+	      return citasMasc;
+	      
 	}
 
 
@@ -151,18 +226,23 @@ public class AccesoBD {
 	 * @param id_Usuario
 	 * @return
 	 */
-	public ResultSet getMascotasUsuarioBD(String id_Usuario) {
+	@SuppressWarnings("unchecked")
+	public List<Mascota> getMascotasUsuarioBD(String id_Usuario) {
 		// TODO Auto-generated method stub
-
-		try {
-			datos=declaracion.executeQuery("select * from mascota where id_Duenio='"+id_Usuario+"'");
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return datos;
+		List<Mascota> mascotasuser=null;
+		session = HibernateConection.getSessionFactoru().openSession();
+	      Transaction tx = null;
+	      try {
+	         tx = session.beginTransaction();
+	         mascotasuser = session.createQuery("from Mascota where id_Duenio='"+id_Usuario+"'").list(); 
+	         tx.commit();
+	      } catch (HibernateException e) {
+	         if (tx!=null) tx.rollback();
+	         e.printStackTrace(); 
+	      } finally {
+	         session.close(); 
+	      }
+	      return mascotasuser;
 	}
 
 
@@ -183,76 +263,6 @@ public class AccesoBD {
 
 		return datos;
 	}
-
-
-	/**
-	 * @param hora 
-	 * 
-	 * 
-	 */
-	public void aniadirCitaBD(java.util.Date cita_Fecha, String id_Mascota, String hora) {
-		// TODO Auto-generated method stub
-
-		try {
-			declaracion.executeUpdate("INSERT INTO `cita` (`id_Cita`, `fecha_cita`, `id_Mascota`, `hora_Cita`) VALUES (NULL, '"+new java.sql.Date(cita_Fecha.getTime())+"', '"+id_Mascota+"', '"+hora+"');");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();  
-		}
-
-	}
-
-
-	/*
-	 * 
-	 * 
-	 */
-	public void eliminarCitaBD(long id_Cita) {
-		// TODO Auto-generated method stub
-
-		try {
-			declaracion.execute("DELETE FROM `cita` WHERE`id_Cita` = '"+id_Cita+"';");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-	}
-
-
-	/**
-	 * 
-	 * @param id_Producto
-	 */
-	public void borrar_ProductoBD(String id_Producto) {
-
-		try {
-			declaracion.execute("DELETE FROM `productos` WHERE`id_Producto` = '"+id_Producto+"';");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-	}
-
-
-	/**
-	 * 
-	 * @param id_Usuario
-	 * @param fecha
-	 */
-	public void aniadir_ReservaBD(String id_Usuario, Date fecha) {
-		try {
-			declaracion.execute("INSERT INTO `reserva` (`id_Reserva`, `id_Usuario`, `pedido_Recogido`, `fecha_Pedido`) VALUES (NULL, '"+id_Usuario+"', '0', '"+fecha+"');");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 
 	/**
 	 * 
@@ -277,7 +287,6 @@ public class AccesoBD {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(id);
 		return id;
 	}
 
@@ -287,164 +296,132 @@ public class AccesoBD {
 	 * @param id_Prod
 	 * @param id_Reserva
 	 */
-	public void aniadirReservaProductoBD(String id_Prod, int id_Reserva) {
+	public void aniadirReservaProductoBD(Productosreservados nuevo) {
 		// TODO Auto-generated method stub
-
-		System.out.println(id_Prod+"+"+id_Reserva);
+	
+		session = HibernateConection.getSessionFactoru().openSession();
+		Transaction tx = null;
 
 		try {
-			declaracion.execute("INSERT INTO `productosreservados` (`cont_Reserva`, `id_Reserva`, `id_Producto`) VALUES (NULL, '"+id_Reserva+"', '"+id_Prod+"');");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			tx = session.beginTransaction();
+			session.save(nuevo); 
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		} finally {
+			session.close();
 		}
-
+	
 	}
 
 
 	/**
 	 * 
-	 * @param fileName
+	 * @param nuevo
 	 */
-	public static void backupBD(File fileName) {
-
-		try {
-			String rutaMySqlDump = "C:\\Archivos de programa\\MySQL\\MySQL Server 5.0\\bin\\mysqldump.exe";
-			String contrasenia ="";
-			String usuario = "root";
-			String dataBase = "bilnow_db";
-
-			String cad = "\"" + rutaMySqlDump + "\" --opt --password=" + contrasenia + " --user=" + usuario + " " + dataBase + " > \"" + fileName.getAbsolutePath()+".sql" +"\"\n";
-
-
-			File fcopi = new File("copia_seguridad.bat");
-			FileWriter fw = new FileWriter(fcopi);
-			fw.write(cad, 0, cad.length());
-			fw.close();
-			Runtime.getRuntime().exec("copia_Seguridad.bat");
-
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-
-	}
-
-
-	/**
-	 * 
-	 * @param dni_usuario
-	 * @return
-	 */
-	public boolean existeUserBD(String dni_usuario) {
-
-		boolean esta=true;
-
-		try {
-			datos=declaracion.executeQuery("Select * from `usuario` where `id_Usuario` = '"+dni_usuario+"';");
-
-			if(datos.next()==false) {
-				esta=false;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return esta;
-
-	}
-
-
-	/**
-	 * 
-	 * @param pw_usuario
-	 * @param dni_usuario
-	 * @return
-	 */
-	public boolean existePasswdBD(String pw_usuario,String dni_usuario) {
-
-		boolean esta=true;
-
-		try {
-			datos=declaracion.executeQuery("SELECT * FROM `usuario` WHERE `id_Usuario`='"+dni_usuario+"' and `pswd_Usuario`='"+pw_usuario+"';");
-
-			if(datos.next()==false) {
-				esta=false;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return esta;
-
-	}
-
-	/**
-	 * 
-	 * @param dni
-	 * @param nom
-	 * @param ap
-	 * @param tlf
-	 * @param pswd
-	 * @param correo
-	 * @param dir
-	 * @param rol
-	 */
-	public void aniadir_UsuarioBD(String dni, String nom, String ap, String tlf, String pswd, String correo, String dir, int rol) {
+	public void aniadir_UsuarioBD(Usuario nuevo) {
 		// TODO Auto-generated method stub
+		session = HibernateConection.getSessionFactoru().openSession();
+		Transaction tx = null;
+
 		try {
-			declaracion.execute("INSERT INTO `usuario` (`id_Usuario`, `nom_Usuario`, `ap_Usuario`, `tlf_Usuario`, `dir_Usuario`, `rol_Usuario`, `pswd_Usuario`,"
-					+ " `email_Usuario`) VALUES ('"+dni+"', '"+nom+"', '"+ap+"', '"+tlf+"', '"+dir+"', '"+rol+"', '"+pswd+"', '"+correo+"');");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			tx = session.beginTransaction();
+			session.save(nuevo); 
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		} finally {
+			session.close(); 
 		}
 	}
 
 
 	/**
 	 * 
-	 * @param id
-	 * @param nom
-	 * @param esp
-	 * @param raza
-	 * @param capa
-	 * @param decha
-	 * @param sexo
-	 * @param id_Duenio
+	 * @param nueva
 	 */
-	public void aniadir_MascotaBD(String id, String nom, String esp, String raza, String capa, Date fecha, int sexo, String id_Duenio) {
+	public void aniadir_MascotaBD(Mascota nueva) {
 		// TODO Auto-generated method stub
+		
+		session = HibernateConection.getSessionFactoru().openSession();
+		Transaction tx = null;
+
 		try {
-			declaracion.execute("INSERT INTO `mascota` (`id_Mascota`, `nombre_Mascota`, `esp_Mascota`, `raza_Mascota`, `capa_Mascota`, `fecha_Nacimiento`, `sexo_Mascota`, `id_Duenio`) "
-					+ "VALUES ('"+id+"', '"+nom+"', '"+esp+"', '"+raza+"', '"+capa+"', '"+new java.sql.Date(fecha.getTime())+"', '"+sexo+"', '"+id_Duenio+"');");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			tx = session.beginTransaction();
+			session.save(nueva); 
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		} finally {
+			session.close(); 
+		}
+
+	}
+		
+
+
+	/**
+	 * 
+	 * @param nuevo
+	 */
+	public void aniadir_ProductoBD(Productos nuevo) {
+		// TODO Auto-generated method stub
+		session = HibernateConection.getSessionFactoru().openSession();
+		Transaction tx = null;
+
+		try {
+			tx = session.beginTransaction();
+			session.save(nuevo); 
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		} finally {
+			session.close(); 
 		}
 	}
 
 
 	/**
 	 * 
-	 * @param id
-	 * @param nom
-	 * @param fabricante
-	 * @param fecha_Cad
-	 * @param price
+	 * @param id_Usuario
+	 * @param fecha
 	 */
-	public void aniadir_ProductoBD(String id, String nom, String fabricante, Date fecha_Cad, String price) {
-		// TODO Auto-generated method stub
+	public void aniadir_ReservaBD(String id_Usuario, Date fecha) {
 		try {
-			declaracion.execute("INSERT INTO `productos` (`id_Producto`, `nom_Producto`, `fecha_Caducidad`, `fabricante_Pro`, `price_Producto`) "
-					+ "VALUES ('"+id+"', '"+nom+"', '"+new java.sql.Date(fecha_Cad.getTime())+"', '"+fabricante+"', '"+price+"');");
+			declaracion.execute("INSERT INTO `reserva` (`id_Reserva`, `id_Usuario`, `pedido_Recogido`, `fecha_Pedido`) VALUES (NULL, '"+id_Usuario+"', '0', '"+fecha+"');");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
+	}
+
+
+	/**
+	 * 
+	 * @param nueva
+	 */
+	public void aniadirCitaBD(Cita nueva) {
+		// TODO Auto-generated method stub
+	
+		session = HibernateConection.getSessionFactoru().openSession();
+		Transaction tx = null;
+
+		try {
+			tx = session.beginTransaction();
+			session.save(nueva); 
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		} finally {
+			session.close(); 
+		}
+	
 	}
 
 
@@ -469,6 +446,57 @@ public class AccesoBD {
 		}
 
 		return esta;
+	}
+
+
+	/**
+	 * 
+	 * @param dni_usuario
+	 * @return
+	 */
+	public boolean existeUserBD(String dni_usuario) {
+	
+		boolean esta=true;
+	
+		try {
+			datos=declaracion.executeQuery("Select * from `usuario` where `id_Usuario` = '"+dni_usuario+"';");
+	
+			if(datos.next()==false) {
+				esta=false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return esta;
+	
+	}
+
+
+	/**
+	 * 
+	 * @param pw_usuario
+	 * @param dni_usuario
+	 * @return
+	 */
+	public boolean existePasswdBD(String pw_usuario,String dni_usuario) {
+	
+		boolean esta=true;
+	
+		try {
+			datos=declaracion.executeQuery("SELECT * FROM `usuario` WHERE `id_Usuario`='"+dni_usuario+"' and `pswd_Usuario`='"+pw_usuario+"';");
+	
+			if(datos.next()==false) {
+				esta=false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return esta;
+	
 	}
 
 
@@ -502,13 +530,64 @@ public class AccesoBD {
 	 */
 	public void eliminarMascotaBD(String dni_Mascota) {
 
+		session = HibernateConection.getSessionFactoru().openSession();
+		Transaction tx = null;
+		
 		try {
-			declaracion.execute("DELETE FROM `mascota` WHERE `id_Mascota` = '"+dni_Mascota+"';");
+			tx = session.beginTransaction();
+			Mascota mascotaDel = (Mascota)session.get(Mascota.class, dni_Mascota); 
+			session.delete(mascotaDel); 
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		} finally {
+			session.close(); 
+		}
+
+	}
+
+
+	/**
+	 * 
+	 * @param id_Producto
+	 */
+	public void borrar_ProductoBD(String id_Producto) {
+	
+		try {
+			declaracion.execute("DELETE FROM `productos` WHERE`id_Producto` = '"+id_Producto+"';");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
+	
+	}
 
+
+	/*
+	 * 
+	 * 
+	 */
+	public void eliminarCitaBD(long id_Cita) {
+		// TODO Auto-generated method stub
+	
+		session = HibernateConection.getSessionFactoru().openSession();
+		Transaction tx = null;
+		
+		try {
+			tx = session.beginTransaction();
+			Cita mascotaDel = (Cita)session.get(Cita.class, id_Cita); 
+			session.delete(mascotaDel); 
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		} finally {
+			session.close(); 
+		}
+	
+	
 	}
 
 
@@ -518,11 +597,19 @@ public class AccesoBD {
 	 */
 	public void eliminarProductoBD(String id_Prod) {
 
+		session = HibernateConection.getSessionFactoru().openSession();
+		Transaction tx = null;
+		
 		try {
-			declaracion.execute("DELETE FROM `productos` WHERE `id_Producto` = '"+id_Prod+"';");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			tx = session.beginTransaction();
+			Productos procDel = (Productos)session.get(Productos.class, id_Prod); 
+			session.delete(procDel); 
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		} finally {
+			session.close(); 
 		}
 
 	}
@@ -542,38 +629,21 @@ public class AccesoBD {
 
 	public void eliminarUsuarioBD(String dni_usuario) {
 
+		session = HibernateConection.getSessionFactoru().openSession();
+		Transaction tx = null;
+		
 		try {
-			declaracion.execute("DELETE FROM `usuario` WHERE`id_Usuario` = '"+dni_usuario+"';");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			tx = session.beginTransaction();
+			Usuario userDel = (Usuario)session.get(Usuario.class, dni_usuario); 
+			session.delete(userDel); 
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		} finally {
+			session.close(); 
 		}
 
-	}
-
-
-	public boolean estaLibreHora(Date cita_Fecha, String hora) {
-
-		boolean esta=false;
-
-		try {
-			datos=declaracion.executeQuery("Select * from `cita` where `fecha_cita` = '"+new java.sql.Date(cita_Fecha.getTime())+"' and `hora_Cita` = '"+hora+"';");
-
-			if(datos.next()==false) {
-				esta=true;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return esta;
-	}
-
-
-	public ResultSet getMascota(String id_Mascota) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
+import modeloBD.Productosreservados;
+
 public class Reserva {
 
 	private ResultSet datos;
@@ -51,7 +53,8 @@ public class Reserva {
 				
 		for(int i=0;i<lista_Productos.getTamanio();i++) {
 			
-			consulta.aniadirReservaProductoBD(lista_Productos.getProd(i).getId_Prod(),id_Reserva);
+			Productosreservados nuevo=new Productosreservados(id_Reserva,Integer.parseInt(lista_Productos.getProd(i).getId_Prod()));
+			consulta.aniadirReservaProductoBD(nuevo);
 			
 			
 		}

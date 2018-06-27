@@ -1,5 +1,5 @@
 package modeloBD;
-// Generated 27-jun-2018 10:59:07 by Hibernate Tools 5.1.0.Alpha1
+// Generated 27-jun-2018 13:23:48 by Hibernate Tools 5.1.0.Alpha1
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

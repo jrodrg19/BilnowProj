@@ -47,28 +47,22 @@ public class Usuario {
 
 		mascota_Control=new Mascota();
 
-		try {
-			datos=consulta.getUsuaioBD(usuario);
-			int i=0;
-			if(datos.next()) {
+		modeloBD.Usuario actual=consulta.getUsuaioBD(usuario);
 
-				this.setDni_usuario(datos.getString(1));
-				this.setNombre_usuario(datos.getString(2).concat(" "+datos.getString(3)));
-				this.settlf_Usuario(datos.getString(4));
-				this.setDireccion_usuario(datos.getString(5));
-				this.setRol(datos.getInt(6));
-				this.setPw_usuario(datos.getString(7));
-				this.setEmail_usuario(datos.getString(8));
-
-			}
-
-			mascotas_Usuario=new Mascota[mascota_Control.getNumMascotas(this.getDni_usuario())];
-			mascotas_Usuario=mascota_Control.getMascotasUsuario(this);
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		this.setDni_usuario(actual.getIdUsuario());
+		this.setNombre_usuario(actual.getNomUsuario().concat(" ").concat(actual.getApUsuario()));
+		this.settlf_Usuario(actual.getTlfUsuario());
+		this.setDireccion_usuario(actual.getDirUsuario());
+		
+		int rol=0;
+		if(actual.isRolUsuario()==true) {
+			rol=1;
 		}
+		this.setRol(rol);
+		this.setPw_usuario(actual.getPswdUsuario());
+		this.setEmail_usuario(actual.getEmailUsuario());
+
+		mascotas_Usuario=mascota_Control.getMascotasUsuario(this);
 
 	}
 
@@ -196,7 +190,7 @@ public class Usuario {
 		boolean existe_User=false;
 		boolean existe_Psswd=false;
 		existe_User=consulta2.existeUserBD(id_User);
-		
+
 		if(existe_User==true){
 
 			existe_Psswd=consulta2.existePasswdBD(pw_User,id_User);
@@ -207,7 +201,7 @@ public class Usuario {
 			else {
 				return 1;
 			}
-			
+
 		}
 		else {
 			return 0;
@@ -219,16 +213,21 @@ public class Usuario {
 
 	public void aniadir_Usuario(String dni, String nom, String ap, String tlf, String pswd, String correo,
 			String dir, int rol) {
-
-		
 		AccesoBD consulta2=new AccesoBD();
-		consulta2.aniadir_UsuarioBD(dni, nom, ap, tlf, pswd, correo, dir, rol);
-		
+		boolean roll=false;
+		if(rol==1) {
+			roll=true;
+		}
+
+		modeloBD.Usuario nuevo=new modeloBD.Usuario(dni, nom, ap, tlf, dir, roll , pswd, correo);
+		consulta2.aniadir_UsuarioBD(nuevo);
+
 	}
 
 	public void eliminar_Usuario(String dni_usuario) {
 
 		consulta.eliminarUsuarioBD(dni_usuario);
+		
 	}
 
 

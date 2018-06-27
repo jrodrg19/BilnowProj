@@ -1,5 +1,5 @@
 package modeloBD;
-// Generated 27-jun-2018 10:59:07 by Hibernate Tools 5.1.0.Alpha1
+// Generated 27-jun-2018 13:23:48 by Hibernate Tools 5.1.0.Alpha1
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -21,13 +21,15 @@ public class Cita implements java.io.Serializable {
 	private Integer idCita;
 	private Date fechaCita;
 	private String idMascota;
+	private String horaCita;
 
 	public Cita() {
 	}
 
-	public Cita(Date fechaCita, String idMascota) {
+	public Cita(Date fechaCita, String idMascota, String horaCita) {
 		this.fechaCita = fechaCita;
 		this.idMascota = idMascota;
+		this.horaCita = horaCita;
 	}
 
 	@Id
@@ -59,6 +61,15 @@ public class Cita implements java.io.Serializable {
 
 	public void setIdMascota(String idMascota) {
 		this.idMascota = idMascota;
+	}
+
+	@Column(name = "hora_Cita", nullable = false, length = 6)
+	public String getHoraCita() {
+		return this.horaCita;
+	}
+
+	public void setHoraCita(String horaCita) {
+		this.horaCita = horaCita;
 	}
 
 }

@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -22,9 +23,9 @@ public class Cita {
 	private String id_Mascota=null;
 
 	private String fecha_Cita;
-	
+
 	private ArrayList<Cita> citas_Mascota=null;
-	
+
 	private AccesoBD consulta;
 
 	/**
@@ -36,9 +37,9 @@ public class Cita {
 		this.setId_Mascota(id_Mascota);	
 
 		consulta=new AccesoBD();
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -94,11 +95,11 @@ public class Cita {
 
 	public String getCita(int pos_Cita) {
 		// TODO Auto-generated method stub
-		
+
 		return String.valueOf(citas_Mascota.get(pos_Cita).getFecha_Cita());
-		
+
 	}
-	
+
 	/**
 	 * @param hora 
 	 * 
@@ -107,7 +108,9 @@ public class Cita {
 	public void aniadirCita(java.util.Date cita_Fecha, String hora) {
 		// TODO Auto-generated method stub
 
-		consulta.aniadirCitaBD(cita_Fecha, this.getId_Mascota(),hora);
+		modeloBD.Cita nueva=new modeloBD.Cita(cita_Fecha, this.getId_Mascota(),hora);
+
+		consulta.aniadirCitaBD(nueva);
 
 	}
 
@@ -117,11 +120,11 @@ public class Cita {
 	 */
 	public void eliminarCita(int pos_Cita) {
 		// TODO Auto-generated method stub
-		
+
 		consulta.eliminarCitaBD(citas_Mascota.get(pos_Cita).getId_Cita());
-		
+
 	}
-	
+
 	/**
 	 * @param string 
 	 * 
@@ -130,29 +133,25 @@ public class Cita {
 
 		citas_Mascota= new ArrayList<Cita>();
 
-			try {
-	
-				datos=consulta.getCitasMascotaBD(this.getId_Mascota());
-				
-				while (datos.next()) {
 
-					Cita cita_nueva=new Cita(this.getId_Mascota());
-					cita_nueva.setId_Cita(datos.getLong(1));
-					cita_nueva.setFecha_Cita(datos.getString(2));
-					cita_nueva.setId_Mascota(datos.getString(3));
+		List<modeloBD.Cita> citasMasc=consulta.getCitasMascotaBD(this.getId_Mascota());
 
+		for(int i=0;i<citasMasc.size();i++) {
+			
+			modeloBD.Cita nueva= citasMasc.get(i);
+			
+			Cita cita_nueva=new Cita(this.getId_Mascota());
+			cita_nueva.setId_Cita(nueva.getIdCita());
+			cita_nueva.setFecha_Cita(nueva.getFechaCita().toString());
+			cita_nueva.setId_Mascota(nueva.getIdMascota());
 
-					citas_Mascota.add(cita_nueva);
-				}
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
+			citas_Mascota.add(cita_nueva);
+			
+		}
+
 
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -173,16 +172,16 @@ public class Cita {
 		}
 
 		return num_Citas;
-		
+
 	}
 
 	public boolean estaLibre(String hora, Date cita_Fecha) {
-		
+
 		return consulta.estaLibreHora(cita_Fecha,hora);
-			
+
 	}
 
-	
 
-	
+
+
 }

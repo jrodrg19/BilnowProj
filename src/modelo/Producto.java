@@ -10,13 +10,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import modeloBD.Productos;
+
 /**
  * 
  * @author Javier
  *
  */
 public class Producto {
-	
+
 	private ResultSet datos;
 
 	public static int pos=0;
@@ -32,7 +34,7 @@ public class Producto {
 	private Date fecha_Cad;
 
 	private List<Producto> productos_Almacen=null;
-	
+
 	private AccesoBD consulta;
 
 
@@ -42,9 +44,9 @@ public class Producto {
 	public Producto() {
 
 		consulta=new AccesoBD();
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -52,7 +54,7 @@ public class Producto {
 	public String getId_Prod() {
 		return id_Prod;
 	}
-	
+
 	/**
 	 * 
 	 * @param id_Prod
@@ -60,7 +62,7 @@ public class Producto {
 	private void setId_Prod(String id_Prod) {
 		this.id_Prod = id_Prod;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -68,7 +70,7 @@ public class Producto {
 	public String getNom_Prod() {
 		return nom_Prod;
 	}
-	
+
 	/**
 	 * 
 	 * @param nom_Prod
@@ -76,7 +78,7 @@ public class Producto {
 	private void setNom_Prod(String nom_Prod) {
 		this.nom_Prod = nom_Prod;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -84,7 +86,7 @@ public class Producto {
 	public int getPrecio() {
 		return precio;
 	}
-		
+
 	/**
 	 * 
 	 * @param precio
@@ -92,7 +94,7 @@ public class Producto {
 	private void setPrecio(int precio) {
 		this.precio = precio;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -100,7 +102,7 @@ public class Producto {
 	public String getFabrica_Prod() {
 		return fabrica_Prod;
 	}
-	
+
 	/**
 	 * 
 	 * @param fabrica_Prod
@@ -108,7 +110,7 @@ public class Producto {
 	private void setFabrica_Prod(String fabrica_Prod) {
 		this.fabrica_Prod = fabrica_Prod;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -116,7 +118,7 @@ public class Producto {
 	public Date getFecha_Cad() {
 		return fecha_Cad;
 	}
-	
+
 	/**
 	 * 
 	 * @param fecha_Cad
@@ -124,7 +126,7 @@ public class Producto {
 	private void setFecha_Cad(Date fecha_Cad) {
 		this.fecha_Cad = fecha_Cad;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -133,40 +135,36 @@ public class Producto {
 
 		productos_Almacen=new ArrayList<>();
 
-		try {
+		List<Productos> prodAlm= consulta.getProductosBD();
 		
-			datos=consulta.getProductosBD();
+		for(int i=0;i<prodAlm.size();i++) {
 
-			while(datos.next()){
-
-				Producto n_Producto=new Producto();
-				
-				n_Producto.setId_Prod(datos.getString(1));
-				n_Producto.setNom_Prod(datos.getString(2));
-				n_Producto.setFecha_Cad(datos.getDate(3));
-				n_Producto.setFabrica_Prod(datos.getString(4));
-				n_Producto.setPrecio(datos.getInt(5));
-				
-				productos_Almacen.add(n_Producto);
-
-			}
-
-		} catch (SQLException e) {
+			Producto n_Producto=new Producto();
+			Productos act= prodAlm.get(i);
 			
-			e.printStackTrace();
 			
+			n_Producto.setId_Prod(act.getIdProducto());
+			n_Producto.setNom_Prod(act.getNomProducto());
+			n_Producto.setFecha_Cad(new Date((act.getFechaCaducidad().getTime())));
+			n_Producto.setFabrica_Prod(act.getFabricantePro());
+			n_Producto.setPrecio(act.getPriceProducto());
+
+			productos_Almacen.add(n_Producto);
+
 		}
-		
+
+
+
 		return productos_Almacen.toArray(new Producto[getNumProductos()]);
 
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	public int getNumProductos() {
-		
+
 		int num_Productos=0;
 
 		try {
@@ -183,42 +181,42 @@ public class Producto {
 		} catch (SQLException e) {
 
 			e.printStackTrace();
-		
+
 		}
 
 		return num_Productos;
 	}
 
-	
-	
+
+
 	/**
 	 * 
 	 * @param id
 	 * @return
 	 */
 	public Producto obtener_Producto(String id) {
-		
+
 		Producto devolver=null;
-		
+
 		for(int i=0;i<productos_Almacen.size();i++) {
-				
+
 			if(productos_Almacen.get(i).getId_Prod()==id) {
-				
+
 				devolver=productos_Almacen.get(i);
-			
+
 			}
-			
+
 		}
-			
+
 		return devolver;
 	}
 
 	public void aniadir_Producto(Producto new_Producto) {
-		
+
 	}
-	
+
 	public void borrar_Producto(String id_Producto) {
-		
+
 	}
-	
+
 }

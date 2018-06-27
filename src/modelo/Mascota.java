@@ -5,6 +5,10 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import com.toedter.calendar.JCalendar;
 
 /**
  * 
@@ -18,7 +22,7 @@ public class Mascota {
 	public ResultSet datos;
 
 	private String dni_Mascota;
-	
+
 	private String nombre;
 
 	private String especie;
@@ -30,7 +34,7 @@ public class Mascota {
 	private String capa;
 
 	private Date fecha_Nacimiento;
-	
+
 	private AccesoBD declaracion;
 
 	/**
@@ -40,7 +44,7 @@ public class Mascota {
 	public Mascota(){
 
 		declaracion=new AccesoBD();
-		
+
 	}
 
 	/**
@@ -65,11 +69,11 @@ public class Mascota {
 	 */
 	private void setNombre(String nom) {
 		// TODO Auto-generated method stub
-		
+
 		this.nombre=nom;
-		
+
 	}
-	
+
 	public String getNombre() {
 		return this.nombre;
 	}
@@ -156,37 +160,36 @@ public class Mascota {
 
 	public Mascota[] getMascotasUsuario(Usuario duenio) {
 		// TODO Auto-generated method stub
-		
-		ArrayList<Mascota> mascotas=new ArrayList<>();
-		
-		try {
-			datos=declaracion.getMascotasUsuarioBD(duenio.getDni_usuario());
-			
-			while(datos.next()) {
 
-				Mascota nueva=new Mascota();
-				
-				nueva.setDni_Mascota(datos.getString(1));
-				nueva.setNombre(datos.getString(2));
-				nueva.setEspecie(datos.getString(3));
-				nueva.setRaza(datos.getString(4));
-				nueva.setCapa(datos.getString(5));
-				nueva.setFecha_Nacimiento(datos.getDate(6));
-				nueva.setSexo(datos.getInt(7));
-				
-				mascotas.add(nueva);
-				
+		ArrayList<Mascota> mascotas=new ArrayList<>();
+
+		List<modeloBD.Mascota> mascotasDB=declaracion.getMascotasUsuarioBD(duenio.getDni_usuario());
+
+		for(int i=0;i<mascotasDB.size();i++) {
+
+			Mascota nueva=new Mascota();
+			modeloBD.Mascota actual= mascotasDB.get(i);
+
+			nueva.setDni_Mascota(actual.getIdMascota());
+			nueva.setNombre(actual.getNombreMascota());
+			nueva.setEspecie(actual.getEspMascota());
+			nueva.setRaza(actual.getRazaMascota());
+			nueva.setCapa(actual.getCapaMascota());
+			nueva.setFecha_Nacimiento(new Date(actual.getFechaNacimiento().getTime()));
+			int sex=0;
+			if(actual.isSexoMascota()==true) {
+				sex=1;
 			}
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			nueva.setSexo(sex);
+
+			mascotas.add(nueva);
+
 		}
-		
+
 		return mascotas.toArray(new Mascota[this.getNumMascotas(duenio.getDni_usuario())]);
+		
 	}
-	
+
 	/**
 	 * 
 	 * @param dni_usuario 
@@ -212,16 +215,23 @@ public class Mascota {
 
 	public void aniadir_Mascota(String dni, String nom, String espec, String raz, String capa,
 			java.util.Date date, int sexo, String id_duenio) {
-		
-			declaracion.aniadir_MascotaBD(dni, nom, espec, raz, capa, date, sexo, id_duenio);
-		
+
+		boolean sex=false;
+
+		if(sexo==1) {
+			sex=true;
+		}
+
+		modeloBD.Mascota nueva=new modeloBD.Mascota(dni, nom, espec, raz, capa, date, sex, id_duenio);
+		declaracion.aniadir_MascotaBD(nueva);
+
 	}
 
 	public void eliminar_Mascota(String dni_Mascota2) {
-		
+
 		declaracion.eliminarCitaMascotaBD(dni_Mascota2);
 		declaracion.eliminarMascotaBD(dni_Mascota2);
-		
+
 	}
 
 }

@@ -5,7 +5,7 @@
   <table-filter match-catalog="bilnow_db" match-name="cita"/>
   <table-filter match-catalog="bilnow_db" match-name="mascota"/>
   <table-filter match-catalog="bilnow_db" match-name="productos"/>
-  <table-filter match-catalog="bilnow_db" match-name="productosreservados"/>
   <table-filter match-catalog="bilnow_db" match-name="reserva"/>
+  <table-filter match-catalog="bilnow_db" match-name="productosreservados"/>
   <table-filter match-catalog="bilnow_db" match-name="usuario"/>
 </hibernate-reverse-engineering>
