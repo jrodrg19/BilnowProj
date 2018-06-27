@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27-jun-2018 10:59:07 by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="modeloBD.Usuario" table="usuario" catalog="bilnow_db" optimistic-lock="version">
+        <id name="idUsuario" type="string">
+            <column name="id_Usuario" length="9" />
+            <generator class="assigned" />
+        </id>
+        <property name="nomUsuario" type="string">
+            <column name="nom_Usuario" length="9" not-null="true" />
+        </property>
+        <property name="apUsuario" type="string">
+            <column name="ap_Usuario" length="9" not-null="true" />
+        </property>
+        <property name="tlfUsuario" type="string">
+            <column name="tlf_Usuario" length="9" not-null="true" />
+        </property>
+        <property name="dirUsuario" type="string">
+            <column name="dir_Usuario" length="20" not-null="true" />
+        </property>
+        <property name="rolUsuario" type="boolean">
+            <column name="rol_Usuario" not-null="true" />
+        </property>
+        <property name="pswdUsuario" type="string">
+            <column name="pswd_Usuario" length="8" not-null="true" />
+        </property>
+        <property name="emailUsuario" type="string">
+            <column name="email_Usuario" length="15" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

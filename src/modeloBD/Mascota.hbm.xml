@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27-jun-2018 10:59:07 by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="modeloBD.Mascota" table="mascota" catalog="bilnow_db" optimistic-lock="version">
+        <id name="idMascota" type="string">
+            <column name="id_Mascota" length="15" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombreMascota" type="string">
+            <column name="nombre_Mascota" length="7" not-null="true" />
+        </property>
+        <property name="espMascota" type="string">
+            <column name="esp_Mascota" length="10" not-null="true" />
+        </property>
+        <property name="razaMascota" type="string">
+            <column name="raza_Mascota" length="10" not-null="true" />
+        </property>
+        <property name="capaMascota" type="string">
+            <column name="capa_Mascota" length="10" not-null="true" />
+        </property>
+        <property name="fechaNacimiento" type="date">
+            <column name="fecha_Nacimiento" length="10" not-null="true" />
+        </property>
+        <property name="sexoMascota" type="boolean">
+            <column name="sexo_Mascota" not-null="true" />
+        </property>
+        <property name="idDuenio" type="string">
+            <column name="id_Duenio" length="9" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

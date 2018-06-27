@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27-jun-2018 10:59:07 by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="modeloBD.Cita" table="cita" catalog="bilnow_db" optimistic-lock="version">
+        <id name="idCita" type="java.lang.Integer">
+            <column name="ID_Cita" />
+            <generator class="identity" />
+        </id>
+        <property name="fechaCita" type="date">
+            <column name="fecha_Cita" length="10" not-null="true" />
+        </property>
+        <property name="idMascota" type="string">
+            <column name="id_Mascota" length="15" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

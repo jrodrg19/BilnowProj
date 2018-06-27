@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27-jun-2018 10:59:07 by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="modeloBD.Productos" table="productos" catalog="bilnow_db" optimistic-lock="version">
+        <id name="idProducto" type="string">
+            <column name="id_Producto" length="9" />
+            <generator class="assigned" />
+        </id>
+        <property name="nomProducto" type="string">
+            <column name="nom_Producto" length="20" not-null="true" />
+        </property>
+        <property name="fechaCaducidad" type="date">
+            <column name="fecha_Caducidad" length="10" not-null="true" />
+        </property>
+        <property name="fabricantePro" type="string">
+            <column name="fabricante_Pro" length="15" not-null="true" />
+        </property>
+        <property name="priceProducto" type="int">
+            <column name="price_Producto" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
