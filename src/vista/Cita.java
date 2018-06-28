@@ -67,8 +67,7 @@ public class Cita {
 
 			public void run() {
 				try {
-					mascota_Cita=mascota;
-					
+					mascota_Cita=mascota;					
 					Cita window = new Cita();
 					frame.setVisible(true);			
 					frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);

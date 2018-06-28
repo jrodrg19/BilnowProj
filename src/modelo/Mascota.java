@@ -186,33 +186,21 @@ public class Mascota {
 
 		}
 
-		return mascotas.toArray(new Mascota[this.getNumMascotas(duenio.getDni_usuario())]);
+		return mascotas.toArray(new Mascota[mascotasDB.size()]);
 		
 	}
 
 	/**
 	 * 
-	 * @param dni_usuario 
-	 * @return
+	 * @param dni
+	 * @param nom
+	 * @param espec
+	 * @param raz
+	 * @param capa
+	 * @param date
+	 * @param sexo
+	 * @param id_duenio
 	 */
-	public int getNumMascotas(String dni_usuario) {
-
-		int num_Mascotas=0;
-
-		try {
-			datos=declaracion.getNumMascotasBD(dni_usuario);
-			if(datos.next()) {
-				num_Mascotas=datos.getInt(1);
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return num_Mascotas;
-	}
-
 	public void aniadir_Mascota(String dni, String nom, String espec, String raz, String capa,
 			java.util.Date date, int sexo, String id_duenio) {
 

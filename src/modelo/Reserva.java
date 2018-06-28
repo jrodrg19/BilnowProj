@@ -33,7 +33,9 @@ public class Reserva {
 
 		consulta=new AccesoBD();
 	
-		consulta.aniadir_ReservaBD(id_Usuario,fecha);
+		modeloBD.Reserva nueva=new modeloBD.Reserva(id_Usuario,false);
+		
+		consulta.aniadir_ReservaBD(nueva);
 
 		id_Reserva=consulta.getId_ReservaBD(id_Usuario,fecha);
 		

@@ -23,16 +23,16 @@ import modelo.Usuario;
 import java.awt.Font;
 import javax.swing.JTextField;
 
-public class MainBilnow extends JFrame {
+public class MainWindow extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField campo_Usuario;
-	private JTextField campo_Password;
+	public JPanel contentPane;
+	public JTextField campo_Usuario;
+	public JTextField campo_Password;
+	public JButton btnNewButton;
 	public Connection connection=null;
+	public JButton btnAcceder;
 	public static java.sql.Statement command;	
-	private static ResultSet datos;
-	private int cont_error=0;
-	
+	private static ResultSet datos;	
 
 	/**
 	 * Launch the application.
@@ -41,7 +41,7 @@ public class MainBilnow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainBilnow frame = new MainBilnow();
+					MainWindow frame = new MainWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,7 +50,7 @@ public class MainBilnow extends JFrame {
 		});
 	}
 
-	public MainBilnow() {
+	public MainWindow() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 332, 475);
@@ -60,7 +60,7 @@ public class MainBilnow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnNewButton = new JButton("Acceder");
+		btnNewButton = new JButton("Acceder");
 		btnNewButton.setBounds(112, 395, 89, 23);
 		contentPane.add(btnNewButton);
 		
@@ -92,7 +92,7 @@ public class MainBilnow extends JFrame {
 		campo_Password.setColumns(10);
 		this.setLocationRelativeTo(null);
 		
-		JButton btnAcceder = new JButton("Acceder");
+		btnAcceder = new JButton("Acceder");
 		btnAcceder.setBounds(449, 124, 192, 44);
 		contentPane.getRootPane().add(btnAcceder);
 		
@@ -111,56 +111,6 @@ public class MainBilnow extends JFrame {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-		
-				//En esta parte del programa haremos la consulta en la base de datos , para ver si el dni que hemos intrducido es de un administrador o de un cliente.
-
-				Usuario user_control=new Usuario();
-				
-				int control_error=user_control.comprobarUsuario(campo_Usuario.getText(),campo_Password.getText());
-				
-				if(control_error==0) {
-					
-					JOptionPane.showMessageDialog(btnAcceder, "Usuario no registrado en la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
-					
-				}
-				else if(control_error==1) {
-					cont_error+=1;
-					if(cont_error==5) {
-						System.exit(0);
-					}
-					int intentos=5-cont_error;
-					JOptionPane.showMessageDialog(btnAcceder, "Contraseña incorrecta numero de intentos:"+intentos+"", "Error", JOptionPane.ERROR_MESSAGE);
-					
-				}
-				else if(control_error==2) {
-					
-					Usuario user=new Usuario(campo_Usuario.getText());
-					
-					if(campo_Usuario.getText().equals(user.getDni_usuario())){
-						
-						if(campo_Password.getText().equals(user.getPw_usuario())){
-							
-							if(user.getRol_usuario()==0) {
-								Administrador nA=new Administrador();
-								nA.main(null);
-							}else {
-								Cliente nC=new Cliente(user,null,null,null);
-								nC.main();
-							}
-							
-						}
-					
-					}
-					
-				}
-					
-			}
-		});
-		
+		}		
 	}
 }

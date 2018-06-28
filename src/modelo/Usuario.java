@@ -229,6 +229,12 @@ public class Usuario {
 		consulta.eliminarUsuarioBD(dni_usuario);
 		
 	}
+	
+	public int get_NumMascotas() {
+
+		return this.mascotas_Usuario.length;
+		
+	}
 
 
 }

@@ -23,12 +23,12 @@ import javax.swing.JCheckBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Aniadircliente extends JFrame {
+public class AniadirUser extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textDNI;
 	private JTextField textNombre;
-	private static Aniadircliente frame ;
+	private static AniadirUser frame ;
 	private JTextField textDireccion;
 	private JTextField textCorreo;
 	private JTextField textApellido;
@@ -42,7 +42,7 @@ public class Aniadircliente extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					frame = new Aniadircliente();
+					frame = new AniadirUser();
 					frame.setVisible(true);
 					frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
@@ -56,7 +56,7 @@ public class Aniadircliente extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Aniadircliente() {
+	public AniadirUser() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 499, 439);
 		contentPane = new JPanel();

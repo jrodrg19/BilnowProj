@@ -155,7 +155,7 @@ public class Producto {
 
 
 
-		return productos_Almacen.toArray(new Producto[getNumProductos()]);
+		return productos_Almacen.toArray(new Producto[prodAlm.size()]);
 
 	}
 

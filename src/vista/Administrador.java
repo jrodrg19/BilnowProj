@@ -103,7 +103,7 @@ public class Administrador {
 		mntmAadirCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				Aniadircliente.main(null);
+				AniadirUser.main(null);
 				
 			}
 		});
@@ -189,7 +189,7 @@ public class Administrador {
 					
 				}
 				else {
-					Aniadircliente nuevo_Cliente=new Aniadircliente();
+					AniadirUser nuevo_Cliente=new AniadirUser();
 					nuevo_Cliente.main(null);
 				}
 				
@@ -202,7 +202,7 @@ public class Administrador {
 		JButton btnAadirCliente = new JButton("A\u00F1adir cliente");
 		btnAadirCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Aniadircliente.main(null);
+				AniadirUser.main(null);
 			}
 		});
 		btnAadirCliente.setBounds(95, 50, 169, 38);
