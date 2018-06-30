@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JCalendar;
 
-import modelo.Mascota;
+import modelo.*;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -29,7 +29,7 @@ public class Cita {
 
 	private static JFrame frame;
 
-	private static Mascota mascota_Cita=null;
+	private static modelo.Mascota mascota_Cita=null;
 	
 	private final String[] horarios= {"8:00",
 									  "9:00",
@@ -56,7 +56,7 @@ public class Cita {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(Mascota mascota, JButton boton_editar) {
+	public static void main(modelo.Mascota mascota, JButton boton_editar) {
 		
 		if(boton_editar!=null) {
 			btnEditarCita=boton_editar;
@@ -67,7 +67,8 @@ public class Cita {
 
 			public void run() {
 				try {
-					mascota_Cita=mascota;					
+					mascota_Cita=mascota;
+					
 					Cita window = new Cita();
 					frame.setVisible(true);			
 					frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);

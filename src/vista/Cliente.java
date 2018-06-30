@@ -8,18 +8,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JButton;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-
-import modelo.AccesoBD;
-import modelo.Mascota;
-import modelo.Usuario;
-
-import javax.swing.JTable;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import modelo.*;
 
 import java.awt.GridBagLayout;
 import javax.swing.JScrollPane;
@@ -33,44 +27,25 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButtonMenuItem;
 
-public class Cliente {
+@SuppressWarnings("serial")
+public class Cliente extends JFrame {
 
 	public static JFrame frame;
-	public JTextField textDni;
-	public JTextField textDireccion;
-	public JTextField textNombre;
-	public JTextField textCorreo;
-	public JTextField textTlfn;
-	public Usuario cliente;
-	public Mascota mascota_Control;
-	public JButton btnPedirCita;
+	private JTextField textDni;
+	private JTextField textDireccion;
+	private JTextField textNombre;
+	private JTextField textCorreo;
+	private JTextField textTlfn;
+	private Usuario cliente;
+	private modelo.Mascota mascota_Control;
 	public int pos_Mascota;
 	public int pos;
-	public JTextField textField;
-	public JTextField textField_1;
-	public JButton eliminar_Masc;
-	public JButton aniadir_Masc;
-	public JButton eliminar_Usuario;
-	public JButton btnCatalogo;
-	public JButton btnVercitas;
-	public Mascota actual;
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frame.setVisible(true);
-					frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+	private JTextField textField;
+	private JTextField textField_1;
+	private JButton eliminar_Masc;
+	private JButton aniadir_Masc;
+	private JButton eliminar_Usuario;
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
@@ -80,19 +55,17 @@ public class Cliente {
 	 * @param eliminarUser 
 	 */
 	public Cliente(Usuario user, JButton btnagregarButton, JButton buttoneliminar, JButton eliminarUser) {
+		
+		System.err.println("hola");
+		
 		eliminar_Usuario=eliminarUser;
 		eliminar_Masc=buttoneliminar;
 		aniadir_Masc=btnagregarButton;
 		this.cliente=user;
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
 		
-		mascota_Control=new Mascota();
+		System.out.println("hola");
+		
+		mascota_Control=new modelo.Mascota();
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
 
@@ -100,7 +73,15 @@ public class Cliente {
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
-		btnPedirCita = new JButton("Pedir cita");
+		JButton btnPedirCita = new JButton("Pedir cita");
+		btnPedirCita.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				Cita nueva=new Cita();
+				nueva.main(cliente.getMascota(pos_Mascota),null);	
+				frame.repaint();
+			}
+		});
 		btnPedirCita.setBounds(659, 459, 134, 39);
 
 		JLabel lblDni = new JLabel("Dni:");
@@ -157,12 +138,30 @@ public class Cliente {
 		scrollPane.setViewportView(panel);
 		panel.setLayout(null);
 		panel.setBackground(Color.WHITE);
-		btnCatalogo = new JButton("Cat\u00E1logo");
-
-
+		JButton btnCatalogo = new JButton("Cat\u00E1logo");
+		btnCatalogo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Reserva nueva=new Reserva(cliente,null,null);
+				nueva.main(null);
+				
+			}
+		});
 		
 		btnCatalogo.setBounds(565, 54, 209, 55);
 		frame.getContentPane().add(btnCatalogo);
+		
+		JButton btnInfo = new JButton("Info");
+		btnInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Informacion info_ventana=new Informacion("Cliente");
+				info_ventana.main(null);
+				
+			}
+		});
+		btnInfo.setBounds(708, 11, 66, 30);
+		frame.getContentPane().add(btnInfo);
 		
 		JLabel lblTlfn = new JLabel("Tel\u00E9fono:");
 		lblTlfn.setBounds(256, 74, 66, 14);
@@ -178,12 +177,35 @@ public class Cliente {
 		
 		if(eliminar_Masc!=null&&aniadir_Masc!=null) {
 			
+			eliminar_Usuario.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					cliente.eliminar_Usuario(cliente.getDni_usuario());
+					frame.setVisible(false);
+					
+				}
+			});
 			eliminar_Usuario.setBounds(29, 448, 178, 30);
 			frame.getContentPane().add(eliminar_Usuario);
 			
+			aniadir_Masc.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					
+					Aniadirmascota nueva_Mascota=new Aniadirmascota(cliente.getDni_usuario());
+					nueva_Mascota.main(cliente.getDni_usuario());
+					
+				}
+			});
 			aniadir_Masc.setBounds(677, 133, 46, 39);
 			frame.getContentPane().add(aniadir_Masc);
 			
+			eliminar_Masc.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+										
+					mascota_Control.eliminar_Mascota(cliente.getMascota(pos_Mascota).getDni_Mascota());
+										
+				}
+			});
 			eliminar_Masc.setBounds(741, 133, 46, 39);
 			frame.getContentPane().add(eliminar_Masc);
 		}
@@ -194,9 +216,9 @@ public class Cliente {
 		JMenu menu = new JMenu("Inicio");
 		menuBar.add(menu);
 		
-	JMenuItem  mntmVerCatlogo = new JMenuItem("Ver Cat\u00E1logo");
+		JMenuItem mntmVerCatlogo = new JMenuItem("Ver Cat\u00E1logo");
 		menu.add(mntmVerCatlogo);
-	mntmVerCatlogo.addActionListener(new ActionListener() {
+		mntmVerCatlogo.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -204,8 +226,20 @@ public class Cliente {
 				Reserva verCatalogo=new Reserva(cliente,null,null);
 				verCatalogo.main(null);
 			}
-		});;
-	
+		});
+		
+		JMenuItem mntmAyuda = new JMenuItem("Ayuda");
+		menu.add(mntmAyuda);
+		mntmAyuda.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Informacion info_ventana=new Informacion("Cliente");
+				Informacion.main(null);
+				
+			}
+		});
 		JMenuItem mntmSalir = new JMenuItem("Salir");
 		mntmSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -221,7 +255,7 @@ public class Cliente {
 		
 		for(int i=0;i<cliente.get_NumMascotas();i++) {
 			
-			actual=cliente.getMascota(i);	
+			modelo.Mascota actual=cliente.getMascota(i);	
 			
 			modelo.Cita control_Cita=new modelo.Cita(actual.getDni_Mascota());
 			JPanel panel_Mascota = new JPanel();
@@ -256,7 +290,15 @@ public class Cliente {
 			nom_Mascota.setText(actual.getDni_Mascota());
 			
 			if(control_Cita.getNumCitas()>0) {
-				btnVercitas = new JButton("Ver cita");
+				JButton btnVercitas = new JButton("Ver cita");
+				btnVercitas.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						
+						vista.Mascota ventana_Mascota = new vista.Mascota(actual);
+						ventana_Mascota.main(actual);
+						
+					}
+				});
 				btnVercitas.setBounds(633, 7, 89, 23);
 				panel_Mascota.add(btnVercitas);
 			}
@@ -265,4 +307,5 @@ public class Cliente {
 		}
 		
 	}
+
 }

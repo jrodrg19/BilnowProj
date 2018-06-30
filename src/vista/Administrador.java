@@ -19,9 +19,8 @@ import javax.swing.JTree;
 import javax.swing.WindowConstants;
 import javax.swing.text.html.HTMLDocument.HTMLReader.HiddenAction;
 
-import modelo.AccesoBD;
-import modelo.Producto;
-import modelo.Usuario;
+import controlador.ControladorAdmin;
+import modelo.*;
 
 import javax.swing.JPanel;
 
@@ -30,7 +29,8 @@ import javax.swing.JPanel;
  * @author Javier
  *
  */
-public class Administrador {
+@SuppressWarnings("serial")
+public class Administrador extends JFrame {
 
 	private static JFrame frame;
 	private JTextField textnom;
@@ -43,36 +43,12 @@ public class Administrador {
 	private static Usuario administrador;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(Usuario user) {
-		administrador=user;
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					
-					frame.setVisible(true);
-					frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-				
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the application.
 	 * @wbp.parser.entryPoint
 	 */
-	public Administrador() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
+	public Administrador(Usuario user) {
+		this.administrador=user;
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 371, 354);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -103,7 +79,7 @@ public class Administrador {
 		mntmAadirCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				AniadirUser.main(null);
+				Aniadircliente.main(null);
 				
 			}
 		});
@@ -184,12 +160,12 @@ public class Administrador {
 					JButton buttoneliminar = new JButton("-");
 					JButton eliminarUser = new JButton("Eliminar usuario");
 					
-					Cliente cliente_Edita=new Cliente(new Usuario(usuario),btnagregarButton,buttoneliminar,eliminarUser);
-					cliente_Edita.main();
+					vista.Cliente cliente_Edita=new vista.Cliente(new Usuario(usuario),btnagregarButton,buttoneliminar,eliminarUser);
+					//cliente_Edita.main();
 					
 				}
 				else {
-					AniadirUser nuevo_Cliente=new AniadirUser();
+					Aniadircliente nuevo_Cliente=new Aniadircliente();
 					nuevo_Cliente.main(null);
 				}
 				
@@ -202,7 +178,7 @@ public class Administrador {
 		JButton btnAadirCliente = new JButton("A\u00F1adir cliente");
 		btnAadirCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AniadirUser.main(null);
+				Aniadircliente.main(null);
 			}
 		});
 		btnAadirCliente.setBounds(95, 50, 169, 38);
@@ -219,7 +195,7 @@ public class Administrador {
 				JButton aniadir= new JButton("+");
 				JButton eliminar=new JButton("-");
 				
-				Reserva admin_Productos=new Reserva(administrador,aniadir,eliminar);
+				vista.Reserva admin_Productos=new vista.Reserva(administrador,aniadir,eliminar);
 				admin_Productos.main(null);
 				
 			}

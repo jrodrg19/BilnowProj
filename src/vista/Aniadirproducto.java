@@ -16,9 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.toedter.calendar.JDateChooser;
 
-import modelo.AccesoBD;
-import modelo.Producto;
-import modeloBD.Productos;
+import modelo.*;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -60,119 +58,118 @@ public class Aniadirproducto extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-	
+
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
-	
+
 		JLabel lblAadirProducto = new JLabel("A\u00D1ADIR PRODUCTO");
 		lblAadirProducto.setFont(new Font("Consolas", Font.BOLD, 26));
 		lblAadirProducto.setBounds(123, 34, 217, 31);
 		panel.add(lblAadirProducto);
-	
+
 		JLabel lblReferencia = new JLabel("Referencia");
 		lblReferencia.setBounds(80, 103, 64, 14);
 		panel.add(lblReferencia);
-	
+
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setBounds(80, 128, 46, 14);
 		panel.add(lblNombre);
-	
+
 		JLabel lblFechacaducidad = new JLabel("Fecha caducidad");
 		lblFechacaducidad.setBounds(80, 153, 91, 14);
 		panel.add(lblFechacaducidad);
-	
+
 		JDateChooser elegir_Fecha=new JDateChooser();
 		elegir_Fecha.setBounds(181, 153, 91, 20);
 		panel.add(elegir_Fecha);
-	
+
 		JLabel lblFabricante = new JLabel("Fabricante");
 		lblFabricante.setBounds(80, 178, 64, 14);
 		panel.add(lblFabricante);
-	
+
 		JLabel lblPrecio = new JLabel("Precio");
 		lblPrecio.setBounds(80, 203, 46, 14);
 		panel.add(lblPrecio);
-	
+
 		textReferencia = new JTextField();
 		textReferencia.setBounds(180, 103, 86, 20);
 		panel.add(textReferencia);
 		textReferencia.setColumns(10);
-	
+
 		textNombre = new JTextField();
 		textNombre.setColumns(10);
 		textNombre.setBounds(180, 128, 86, 20);
 		panel.add(textNombre);
-	
+
 		textFabricante = new JTextField();
 		textFabricante.setColumns(10);
 		textFabricante.setBounds(180, 178, 86, 20);
 		panel.add(textFabricante);
-	
+
 		textPrecio = new JTextField();
 		textPrecio.setColumns(10);
 		textPrecio.setBounds(180, 203, 86, 20);
 		panel.add(textPrecio);
-	
+
 		JButton btnAniadir = new JButton("A\u00F1adir");
 		btnAniadir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-	
-	
+
+
 				boolean existe=false;
 				AccesoBD consulta=new AccesoBD();
 				existe=consulta.existeProductoBD(textReferencia.getText());
 				if(existe==true) {
-	
+
 					JOptionPane.showMessageDialog(btnAniadir, "Producto ya registrado en la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
-	
+
 				}
 				else {
-	
-					Productos nuevo =new Productos(textReferencia.getText(),textNombre.getText(),elegir_Fecha.getDate(),textFabricante.getText(),Integer.parseInt(textPrecio.getText()));
-					consulta.aniadir_ProductoBD(nuevo);
-	
+
+					//consulta.aniadir_ProductoBD(textReferencia.getText(),textNombre.getText(),textFabricante.getText(),elegir_Fecha.getDate(),textPrecio.getText());
+
 					frame.setVisible(false);
-	
+
 				}
-	
+
 			}
 		});
 		btnAniadir.setBounds(189, 257, 89, 23);
 		panel.add(btnAniadir);
-	
+
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-	
+
 				frame.setVisible(false);
-	
+
 			}
 		});
 		btnCancelar.setBounds(350, 329, 89, 23);
 		panel.add(btnCancelar);
-	
+
 		JButton btnConsultar = new JButton("Consultar");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-	
+
 				String id_Producto=textReferencia.getText();
-	
+
 				AccesoBD consulta=new AccesoBD();
-	
+
 				if(consulta.existeProductoBD(id_Producto)) {
 					textReferencia.setBackground(Color.RED);
 				}
 				else {
 					textReferencia.setBackground(Color.GREEN);
 				}
-	
+
 			}
 		});
 		btnConsultar.setBounds(277, 103, 110, 23);
 		panel.add(btnConsultar);
-	
+
 	}
-	
+
 }

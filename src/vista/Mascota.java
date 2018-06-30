@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
-import modelo.Usuario;
+import modelo.*;
 
 import javax.swing.JButton;
 

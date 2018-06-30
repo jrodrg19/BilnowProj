@@ -12,10 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 
-import modelo.AccesoBD;
-import modelo.Carrito;
-import modelo.Producto;
-import modelo.Usuario;
+import modelo.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -60,7 +57,6 @@ public class Reserva {
 					frame.setVisible(true);
 					frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 					
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -134,6 +130,8 @@ public class Reserva {
 		//Crear array de todos los productos;
 
 		carrito=new Producto[carro_compra.getTamanio()];
+
+		productos_Tienda=new Producto[gestionar.getNumProductos()];
 
 		productos_Tienda= gestionar.getProductos();
 

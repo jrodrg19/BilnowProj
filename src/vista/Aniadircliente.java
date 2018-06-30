@@ -8,8 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import modelo.AccesoBD;
-import modelo.Usuario;
+import modelo.*;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -23,12 +22,12 @@ import javax.swing.JCheckBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class AniadirUser extends JFrame {
+public class Aniadircliente extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textDNI;
 	private JTextField textNombre;
-	private static AniadirUser frame ;
+	private static Aniadircliente frame ;
 	private JTextField textDireccion;
 	private JTextField textCorreo;
 	private JTextField textApellido;
@@ -42,7 +41,7 @@ public class AniadirUser extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					frame = new AniadirUser();
+					frame = new Aniadircliente();
 					frame.setVisible(true);
 					frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
@@ -56,7 +55,7 @@ public class AniadirUser extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AniadirUser() {
+	public Aniadircliente() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 499, 439);
 		contentPane = new JPanel();
@@ -193,7 +192,7 @@ public class AniadirUser extends JFrame {
 					JButton eliminarUser=new JButton("Borrar Usuario");
 
 					Cliente cliente_Edita=new Cliente(new Usuario(textDNI.getText()),btnagregarButton,buttoneliminar,eliminarUser);
-					cliente_Edita.main();
+					//cliente_Edita.main();
 
 					frame.setVisible(false);	
 

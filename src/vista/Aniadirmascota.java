@@ -17,8 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.toedter.calendar.JDateChooser;
 
-import modelo.AccesoBD;
-import modelo.Usuario;
+import modelo.*;
 
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;

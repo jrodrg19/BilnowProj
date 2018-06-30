@@ -17,8 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import modelo.Conecta;
-import modelo.Usuario;
+import controlador.ControladorMainWin;
 
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -28,29 +27,12 @@ public class MainWindow extends JFrame {
 	public JPanel contentPane;
 	public JTextField campo_Usuario;
 	public JTextField campo_Password;
-	public JButton btnNewButton;
-	public Connection connection=null;
 	public JButton btnAcceder;
-	public static java.sql.Statement command;	
-	private static ResultSet datos;	
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainWindow frame = new MainWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public MainWindow() {
+		
+		addWindowListener(new ControladorMainWin(this));
+		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 332, 475);
@@ -60,7 +42,7 @@ public class MainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		btnNewButton = new JButton("Acceder");
+		JButton btnNewButton = new JButton("Acceder");
 		btnNewButton.setBounds(112, 395, 89, 23);
 		contentPane.add(btnNewButton);
 		
@@ -95,22 +77,5 @@ public class MainWindow extends JFrame {
 		btnAcceder = new JButton("Acceder");
 		btnAcceder.setBounds(449, 124, 192, 44);
 		contentPane.getRootPane().add(btnAcceder);
-		
-		Conecta conectar=new Conecta();
-		connection=conectar.getConexion();
-		
-		try {
-			command=connection.createStatement();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		try {
-			command=connection.createStatement();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
 	}
 }
