@@ -8,8 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controlador.ControlUser;
 import modelo.*;
-
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,33 +24,19 @@ import java.awt.event.ActionEvent;
 
 public class Aniadircliente extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField textDNI;
-	private JTextField textNombre;
-	private static Aniadircliente frame ;
-	private JTextField textDireccion;
-	private JTextField textCorreo;
-	private JTextField textApellido;
-	private JTextField textTelefono;
-	private JTextField textContrasenia;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frame = new Aniadircliente();
-					frame.setVisible(true);
-					frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	public JPanel contentPane;
+	public JTextField textDNI;
+	public JTextField textNombre;
+	public Aniadircliente frame ;
+	public JTextField textDireccion;
+	public JTextField textCorreo;
+	public JTextField textApellido;
+	public JTextField textTelefono;
+	public JTextField textContrasenia;
+	public JButton btnAniadir;
+	public JCheckBox checkBoxAdmin;
+	public JButton btnCancelar;
+	public JButton btnConsultar;
 
 	/**
 	 * Create the frame.
@@ -109,23 +95,7 @@ public class Aniadircliente extends JFrame {
 		panel.add(textCorreo);
 		textCorreo.setColumns(10);
 
-		JButton btnConsultar = new JButton("Consultar");
-		btnConsultar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				String id_Usuario=textDNI.getText();
-
-				AccesoBD consulta=new AccesoBD();
-
-				if(consulta.existeUserBD(id_Usuario)) {
-					textDNI.setBackground(Color.RED);
-				}
-				else {
-					textDNI.setBackground(Color.GREEN);
-				}
-
-			}
-		});
+		btnConsultar = new JButton("Consultar");
 		btnConsultar.setBounds(242, 77, 110, 23);
 		panel.add(btnConsultar);
 
@@ -160,55 +130,15 @@ public class Aniadircliente extends JFrame {
 		lblAdmin.setBounds(70, 260, 46, 14);
 		panel.add(lblAdmin);
 
-		JCheckBox checkBoxAdmin = new JCheckBox("");
+		checkBoxAdmin = new JCheckBox("");
 		checkBoxAdmin.setBounds(146, 255, 26, 23);
 		panel.add(checkBoxAdmin);
 
-		JButton btnAniadir = new JButton("A\u00F1adir");
-		btnAniadir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				boolean existe=false;
-				AccesoBD consulta=new AccesoBD();
-				existe=consulta.existeUserBD(textDNI.getText());
-				if(existe==true) {
-
-					JOptionPane.showMessageDialog(btnAniadir, "Usuario ya registrado en la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
-
-				}
-				else {
-
-					int rol=1;
-
-					if(checkBoxAdmin.isSelected()) {
-						rol=0;
-					}
-
-					Usuario nuevo=new Usuario();
-					nuevo.aniadir_Usuario(textDNI.getText(),textNombre.getText(),textApellido.getText(),textTelefono.getText(),textContrasenia.getText(),textCorreo.getText(),textDireccion.getText(),rol);
-
-					JButton btnagregarButton = new JButton("+");
-					JButton buttoneliminar = new JButton("-");
-					JButton eliminarUser=new JButton("Borrar Usuario");
-
-					Cliente cliente_Edita=new Cliente(new Usuario(textDNI.getText()),btnagregarButton,buttoneliminar,eliminarUser);
-					//cliente_Edita.main();
-
-					frame.setVisible(false);	
-
-				}
-
-			}
-		});
+		btnAniadir = new JButton("A\u00F1adir");
 		btnAniadir.setBounds(192, 299, 89, 23);
 		panel.add(btnAniadir);
 
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-			}
-		});
+		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(350, 340, 89, 23);
 		panel.add(btnCancelar);
 	}

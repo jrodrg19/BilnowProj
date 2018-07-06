@@ -17,54 +17,28 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import controlador.ControlCita;
 import modelo.*;
-
 import javax.swing.JButton;
 
 public class Mascota {
 
-	public static JFrame frame;
+	public JFrame frame;
+		
+	public JPanel panel;
 	
-	private modelo.Mascota mascota_seleccionada;
+	public JButton btnBorrarCita;
 	
-	private modelo.Cita control_Cita;
+	public JButton btnEditarCita;
 	
-	private JPanel panel;
+	public JScrollPane scrollPane;
 	
-	private JButton btnBorrarCita;
-	
-	private JButton btnEditarCita;
-	
-	private JScrollPane scrollPane;
-	
-	private int cita_Seleccionada;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(modelo.Mascota actual) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Mascota window = new Mascota(actual);
-					
-					frame.setVisible(true);
-					frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	/**
 	 * Create the application.
 	 * @param actual 
 	 */
 	public Mascota(modelo.Mascota actual) {
 		
-		this.mascota_seleccionada=actual;
-		control_Cita=new modelo.Cita(actual.getDni_Mascota());
 		initialize();
 	}
 
@@ -75,7 +49,6 @@ public class Mascota {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 499, 731);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		scrollPane = new JScrollPane();
@@ -89,88 +62,8 @@ public class Mascota {
 		
 		
 		btnEditarCita = new JButton("Editar Cita");
-		btnEditarCita.setBounds(280, 595, 124, 42);
-		
-		pintar_Panel();
-		
-		
-		btnBorrarCita.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			
-				control_Cita.eliminarCita(cita_Seleccionada);
-				
-				pintar_Panel();
-									
-			}
-		});
-		
-		btnEditarCita.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			
-				vista.Cita editar_Reserva=new vista.Cita();
-				control_Cita.eliminarCita(cita_Seleccionada);
-				editar_Reserva.main(mascota_seleccionada,null);
-				
-				frame.setVisible(false);
-				
-			}
-		});
-			
-			
-		frame.repaint();
-		
-	}
-	
-	private void pintar_Panel() {
-		
-			panel = new JPanel();
-			scrollPane.setViewportView(panel);
-			panel.setLayout(null);
-			
-			panel.setPreferredSize(new Dimension(426, 43*control_Cita.getNumCitas()));
-			
-			control_Cita.getCitasMascota();
-
-			int pos=0;
-			
-			for(int i=0;i< control_Cita.getNumCitas();i++) {
-				
-				JPanel panel_1 = new JPanel();
-				panel_1.setBounds(0, pos, 426, 43);
-				panel.add(panel_1);
-				panel_1.setLayout(null);
-				
-				JLabel label_Fecha = new JLabel(control_Cita.getCita(i));
-				label_Fecha.setBounds(50, 11, 300, 14);
-				panel_1.add(label_Fecha);
-				
-				panel_1.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mousePressed(MouseEvent arg0) {
-						
-						frame.getContentPane().add(btnBorrarCita);
-						
-						frame.getContentPane().add(btnEditarCita);
-
-						
-						int pos=panel_1.getY();
-						
-						if(pos!=0) {
-							cita_Seleccionada=pos/43;
-						}
-						else {
-							cita_Seleccionada=0;
-						}
-						
-						frame.repaint();
-						
-					}
-				});
-				
-				pos=pos+43;
-				
-			}
-		
+		btnEditarCita.setBounds(280, 595, 124, 42);			
+					
 	}
 	
 }

@@ -1,27 +1,20 @@
 package vista;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.Statement;
-import java.sql.*;
 
-import javax.imageio.IIOException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import controlador.ControladorMainWin;
-
 import java.awt.Font;
-import javax.swing.JTextField;
 
+import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+@SuppressWarnings("serial")
 public class MainWindow extends JFrame {
 
 	public JPanel contentPane;
@@ -30,9 +23,7 @@ public class MainWindow extends JFrame {
 	public JButton btnAcceder;
 
 	public MainWindow() {
-		
-		addWindowListener(new ControladorMainWin(this));
-		
+			
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 332, 475);
@@ -42,15 +33,15 @@ public class MainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnNewButton = new JButton("Acceder");
-		btnNewButton.setBounds(112, 395, 89, 23);
-		contentPane.add(btnNewButton);
-		
 		JLabel lblFondo = new JLabel("");
 		lblFondo.setBackground(Color.WHITE);
 		lblFondo.setBounds(0, 11, 326, 256);
 		lblFondo.setIcon(new ImageIcon("iconos/logo.gif"));
 		contentPane.add(lblFondo);
+		
+		btnAcceder = new JButton("Acceder");
+		btnAcceder.setBounds(112, 395, 89, 23);
+		contentPane.add(btnAcceder);
 		
 		JLabel lblUsuario = new JLabel("Usuario:");
 		lblUsuario.setFont(new Font("Century Gothic", Font.PLAIN, 14));
@@ -74,8 +65,5 @@ public class MainWindow extends JFrame {
 		campo_Password.setColumns(10);
 		this.setLocationRelativeTo(null);
 		
-		btnAcceder = new JButton("Acceder");
-		btnAcceder.setBounds(449, 124, 192, 44);
-		contentPane.getRootPane().add(btnAcceder);
 	}
 }

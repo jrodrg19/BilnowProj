@@ -19,7 +19,7 @@ import javax.swing.JTree;
 import javax.swing.WindowConstants;
 import javax.swing.text.html.HTMLDocument.HTMLReader.HiddenAction;
 
-import controlador.ControladorAdmin;
+import controlador.ControlUser;
 import modelo.*;
 
 import javax.swing.JPanel;
@@ -29,26 +29,28 @@ import javax.swing.JPanel;
  * @author Javier
  *
  */
-@SuppressWarnings("serial")
-public class Administrador extends JFrame {
+public class Administrador {
 
-	private static JFrame frame;
-	private JTextField textnom;
-	private JTextField Apellido;
-	private JTextField textDireccion;
-	private JTextField textTelefono;
-	private JTextField textEmail;
-	private JTextField textDni;
-	private JTextField textField;
-	private static Usuario administrador;
-
+	public JFrame frame;
+	public JTextField textnom;
+	public JTextField Apellido;
+	public JTextField textDireccion;
+	public JTextField textTelefono;
+	public JTextField textEmail;
+	public JTextField textDni;
+	public JTextField textField;
+	public Usuario administrador;
+	public JMenuItem mntmAadirCliente;
+	public JMenuItem mntmAadirProducto;
+	public JMenuItem mntmSalir;
+	public JButton btnBuscar;
+	public JButton btnAadirCliente;
+	public JButton btnAniadirProducto;
+	
 	/**
-	 * Create the application.
-	 * @wbp.parser.entryPoint
+	 * Initialize the contents of the frame.
 	 */
-	public Administrador(Usuario user) {
-		this.administrador=user;
-		
+	public Administrador() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 371, 354);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -75,29 +77,13 @@ public class Administrador extends JFrame {
 		 * Crea una pesaña en el menu
 		 * 
 		 */
-		JMenuItem mntmAadirCliente = new JMenuItem("A\u00F1adir Cliente");
-		mntmAadirCliente.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				Aniadircliente.main(null);
-				
-			}
-		});
-		mnInicio.add(mntmAadirCliente);
+		mntmAadirCliente = new JMenuItem("A\u00F1adir Cliente");
+		mnInicio.add(mntmAadirCliente);	
 		
-		
-		
-		JMenuItem mntmAadirProducto = new JMenuItem("A\u00F1adir Producto");
-		mntmAadirProducto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				Aniadirproducto.main(null);
-				
-			}
-		});
+		mntmAadirProducto = new JMenuItem("A\u00F1adir Producto");
 		mnInicio.add(mntmAadirProducto);
 		
-		JMenuItem mntmSalir = new JMenuItem("Salir");
+		mntmSalir = new JMenuItem("Salir");
 		mntmSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			
@@ -146,41 +132,10 @@ public class Administrador extends JFrame {
 		textField.setColumns(10);
 		
 		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				
-				String usuario=textField.getText();
-				boolean existe=false;
-				AccesoBD consulta=new AccesoBD();
-				existe=consulta.existeUserBD(usuario);
-				if(existe==true) {
-					
-					JButton btnagregarButton = new JButton("+");
-					JButton buttoneliminar = new JButton("-");
-					JButton eliminarUser = new JButton("Eliminar usuario");
-					
-					vista.Cliente cliente_Edita=new vista.Cliente(new Usuario(usuario),btnagregarButton,buttoneliminar,eliminarUser);
-					//cliente_Edita.main();
-					
-				}
-				else {
-					Aniadircliente nuevo_Cliente=new Aniadircliente();
-					nuevo_Cliente.main(null);
-				}
-				
-				
-			}
-		});
 		btnBuscar.setBounds(200, 236, 89, 23);
 		frame.getContentPane().add(btnBuscar);
 		
-		JButton btnAadirCliente = new JButton("A\u00F1adir cliente");
-		btnAadirCliente.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Aniadircliente.main(null);
-			}
-		});
+		btnAadirCliente = new JButton("A\u00F1adir cliente");
 		btnAadirCliente.setBounds(95, 50, 169, 38);
 		frame.getContentPane().add(btnAadirCliente);
 		
@@ -188,18 +143,7 @@ public class Administrador extends JFrame {
 		lblDni_1.setBounds(66, 240, 46, 14);
 		frame.getContentPane().add(lblDni_1);
 		
-		JButton btnAniadirProducto = new JButton("A\u00F1adir producto");
-		btnAniadirProducto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-				JButton aniadir= new JButton("+");
-				JButton eliminar=new JButton("-");
-				
-				vista.Reserva admin_Productos=new vista.Reserva(administrador,aniadir,eliminar);
-				admin_Productos.main(null);
-				
-			}
-		});
+		btnAniadirProducto = new JButton("A\u00F1adir producto");
 		btnAniadirProducto.setBounds(95, 114, 169, 38);
 		frame.getContentPane().add(btnAniadirProducto);
 	}

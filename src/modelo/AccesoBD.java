@@ -567,7 +567,7 @@ public class AccesoBD {
 		
 		try {
 			tx = session.beginTransaction();
-			modeloBD.Cita mascotaDel = (Cita)session.get(Cita.class, id_Cita); 
+			modeloBD.Cita mascotaDel = (Cita)session.get(modeloBD.Cita.class,Integer.parseInt(String.valueOf(id_Cita).substring(0))); 
 			session.delete(mascotaDel); 
 			tx.commit();
 		} catch (HibernateException e) {

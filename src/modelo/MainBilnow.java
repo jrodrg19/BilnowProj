@@ -1,7 +1,8 @@
+package modelo;
 import java.awt.EventQueue;
 
-import controlador.ControladorMainWin;
-import vista.MainWindow;
+import controlador.*;
+import vista.*;
 
 public class MainBilnow {
 
@@ -10,7 +11,7 @@ public class MainBilnow {
 			public void run() {
 				try {
 					MainWindow frame = new MainWindow();
-					ControladorMainWin mainWin=new ControladorMainWin(frame);
+					frame.btnAcceder.addActionListener(new ControlMainWin(frame));
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -24,29 +24,15 @@ import java.awt.event.ActionEvent;
 
 public class Aniadirproducto extends JFrame {
 
-	private static Aniadirproducto frame;
-	private JPanel contentPane;
-	private JTextField textReferencia;
-	private JTextField textNombre;
-	private JTextField textFabricante;
-	private JTextField textPrecio;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frame = new Aniadirproducto();
-					frame.setVisible(true);
-					frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	public static Aniadirproducto frame;
+	public JPanel contentPane;
+	public JTextField textReferencia;
+	public JTextField textNombre;
+	public JTextField textFabricante;
+	public JTextField textPrecio;
+	public JButton btnAniadir;
+	public JButton btnCancelar;
+	public JButton btnConsultar ;
 
 	/**
 	 * Create the frame.
@@ -113,60 +99,15 @@ public class Aniadirproducto extends JFrame {
 		textPrecio.setBounds(180, 203, 86, 20);
 		panel.add(textPrecio);
 
-		JButton btnAniadir = new JButton("A\u00F1adir");
-		btnAniadir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-
-				boolean existe=false;
-				AccesoBD consulta=new AccesoBD();
-				existe=consulta.existeProductoBD(textReferencia.getText());
-				if(existe==true) {
-
-					JOptionPane.showMessageDialog(btnAniadir, "Producto ya registrado en la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
-
-				}
-				else {
-
-					//consulta.aniadir_ProductoBD(textReferencia.getText(),textNombre.getText(),textFabricante.getText(),elegir_Fecha.getDate(),textPrecio.getText());
-
-					frame.setVisible(false);
-
-				}
-
-			}
-		});
+		btnAniadir = new JButton("A\u00F1adir");
 		btnAniadir.setBounds(189, 257, 89, 23);
 		panel.add(btnAniadir);
 
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				frame.setVisible(false);
-
-			}
-		});
+		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(350, 329, 89, 23);
 		panel.add(btnCancelar);
 
-		JButton btnConsultar = new JButton("Consultar");
-		btnConsultar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				String id_Producto=textReferencia.getText();
-
-				AccesoBD consulta=new AccesoBD();
-
-				if(consulta.existeProductoBD(id_Producto)) {
-					textReferencia.setBackground(Color.RED);
-				}
-				else {
-					textReferencia.setBackground(Color.GREEN);
-				}
-
-			}
-		});
+		btnConsultar = new JButton("Consultar");
 		btnConsultar.setBounds(277, 103, 110, 23);
 		panel.add(btnConsultar);
 

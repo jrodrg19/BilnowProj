@@ -3,60 +3,32 @@ package controlador;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
-import org.hibernate.service.spi.Manageable;
+import modelo.*;
+import vista.*;
 
-import modelo.Usuario;
-import vista.Administrador;
-import vista.Cliente;
-import vista.MainWindow;
-
-public class ControladorMainWin extends WindowAdapter{
+public class ControlMainWin implements ActionListener{
 
 	private MainWindow mainBilnow;
-
-	public ControladorMainWin(MainWindow mainBilnow) {
-
-		this.mainBilnow=mainBilnow;
-
-	}
-	
-	public void WindowOpened(WindowEvent e) {
-		
-		this.mainBilnow.btnAcceder.addActionListener(new InicioSesion(mainBilnow));
-	}
-
-}
-
-class InicioSesion implements ActionListener{
-
-	private MainWindow mainBilnow;
-	
 	private int cont_error=0;
-	
-	public InicioSesion(MainWindow mainBilnow) {
+
+	public ControlMainWin(MainWindow mainBilnow) {
 
 		this.mainBilnow=mainBilnow;
+		this.mainBilnow.btnAcceder.addActionListener(this);
 
 	}
-	
-	@SuppressWarnings({ "static-access", "unused" })
-	public void actionPerformed(ActionEvent e) {
 
-		System.out.println("hola");
+	public void actionPerformed(ActionEvent arg0) {
+
 		//En esta parte del programa haremos la consulta en la base de datos , para ver si el dni que hemos intrducido es de un administrador o de un cliente.
 
 		Usuario user_control=new Usuario();
 
 		int control_error=user_control.comprobarUsuario(mainBilnow.campo_Usuario.getText(),mainBilnow.campo_Password.getText());
-
-		System.out.println(mainBilnow.campo_Usuario.getText()+", "+mainBilnow.campo_Password.getText());
 
 		if(control_error==0) {
 
@@ -84,32 +56,22 @@ class InicioSesion implements ActionListener{
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
 								try {
-									Administrador frame=new Administrador(user);
-									ControladorAdmin cAdm=new ControladorAdmin(frame);
-									frame.setVisible(true);
-									frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-
+									vista.Administrador aDwin=new vista.Administrador();
+									ControlAdmin cAdm=new ControlAdmin(aDwin);
+									aDwin.frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+									aDwin.frame.setVisible(true);
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
 							}
 						});
 					}
-					
 					else {
-						EventQueue.invokeLater(new Runnable() {
-							public void run() {
-								try {
-									Cliente nC=new vista.Cliente(user,null,null,null);
-									ControladorUser cUser=new ControladorUser(user, nC); 
-									nC.setVisible(true);
-									nC.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						});
+						Cliente nC=new vista.Cliente(null,null,null);
+						ControlUser cUser=new ControlUser(user, nC); 
+						nC.frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+						nC.frame.setVisible(true);
 
 					}
 
@@ -120,8 +82,6 @@ class InicioSesion implements ActionListener{
 		}
 
 	}
-	
-	
-	
-	
+
+
 }

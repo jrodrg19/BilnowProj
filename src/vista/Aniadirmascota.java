@@ -26,40 +26,27 @@ import java.awt.event.ActionEvent;
 
 public class Aniadirmascota extends JFrame {
 
-	private static Aniadirmascota frame;
-	private static JPanel contentPane;
-	private JTextField textFieldDNIMascota;
-	private JTextField textNombre;
-	private JTextField textField_3;
-	private JTextField textRaza;
-	private JTextField textEspecie;
-	private JTextField textDNIDuenio;
-	private JTextField textCapa;
-	private AccesoBD consulta;
-	private modelo.Mascota mascota;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String id_Duenio) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frame = new Aniadirmascota(id_Duenio);
-					frame.setVisible(true);
-					frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	public static Aniadirmascota frame;
+	public static JPanel contentPane;
+	public JTextField textFieldDNIMascota;
+	public JTextField textNombre;
+	public JTextField textField_3;
+	public JTextField textRaza;
+	public JTextField textEspecie;
+	public JTextField textDNIDuenio;
+	public JTextField textCapa;
+	public modelo.Mascota mascota;
+	public JButton btnCancelar;
+	public JButton btnAniadir;
+	public JButton btnConsultar;
+	public JDateChooser elegir_Fecha;
+	public JCheckBox chckbxMacho;
+	public JCheckBox chckbxHembra;
 	/**
 	 * Create the frame.
 	 * @param string 
 	 */
-	public Aniadirmascota(String id_Duenio) {
+	public Aniadirmascota() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 499, 439);
 		contentPane = new JPanel();
@@ -116,7 +103,7 @@ public class Aniadirmascota extends JFrame {
 		lblFechanacimiento.setBounds(43, 202, 110, 14);
 		panel.add(lblFechanacimiento);
 		
-		JDateChooser elegir_Fecha=new JDateChooser();
+		elegir_Fecha=new JDateChooser();
 		elegir_Fecha.setBounds(153, 196, 116, 20);
 		panel.add(elegir_Fecha);
 		
@@ -124,11 +111,11 @@ public class Aniadirmascota extends JFrame {
 		lblSexo.setBounds(43, 232, 35, 14);
 		panel.add(lblSexo);
 		
-		JCheckBox chckbxHembra = new JCheckBox("Hembra");
+		chckbxHembra = new JCheckBox("Hembra");
 		chckbxHembra.setBounds(131, 228, 64, 23);
 		panel.add(chckbxHembra);
 		
-		JCheckBox chckbxMacho = new JCheckBox("Macho");
+		chckbxMacho = new JCheckBox("Macho");
 		chckbxMacho.setBounds(77, 228, 57, 23);
 		panel.add(chckbxMacho);
 		
@@ -145,73 +132,21 @@ public class Aniadirmascota extends JFrame {
 		textDNIDuenio.setColumns(10);
 		textDNIDuenio.setBounds(152, 257, 116, 20);
 		panel.add(textDNIDuenio);
-		textDNIDuenio.setText(id_Duenio);
 		
 		textCapa = new JTextField();
 		textCapa.setColumns(10);
 		textCapa.setBounds(153, 174, 116, 20);
 		panel.add(textCapa);
 		
-		JButton btnAniadir = new JButton("A\u00F1adir");
-		btnAniadir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				boolean existe=false;
-				AccesoBD consulta=new AccesoBD();
-				existe=consulta.existeMascotaBD(textFieldDNIMascota.getText());
-				if(existe==true) {
-					
-					JOptionPane.showMessageDialog(btnAniadir, "Mascota ya registrada en la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
-					
-				}
-				else {
-
-					consulta=new AccesoBD();
-					
-					int sexo=0;
-					
-					if(chckbxMacho.isSelected()) {
-						sexo=1;
-					}
-					
-					mascota.aniadir_Mascota(textFieldDNIMascota.getText(),textNombre.getText(),textEspecie.getText(),textRaza.getText(),textCapa.getText(),elegir_Fecha.getDate(),sexo,textDNIDuenio.getText());
-				
-					frame.setVisible(false);
-					
-				}
-				
-			}
-		});
+		btnAniadir = new JButton("A\u00F1adir");
 		btnAniadir.setBounds(191, 308, 89, 23);
 		panel.add(btnAniadir);
 		
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-			frame.setVisible(false);
-			
-			}
-		});
+		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(353, 343, 89, 23);
 		panel.add(btnCancelar);
 		
-		JButton btnConsultar = new JButton("Consultar");
-		btnConsultar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				String id_Mascota=textFieldDNIMascota.getText();
-				
-				AccesoBD consulta=new AccesoBD();
-				
-				if(consulta.existeMascotaBD(id_Mascota)) {
-					textFieldDNIMascota.setBackground(Color.RED);
-				}
-				else {
-					textFieldDNIMascota.setBackground(Color.GREEN);
-				}
-			}
-		});
+		btnConsultar = new JButton("Consultar");
 		btnConsultar.setBounds(324, 76, 110, 23);
 		panel.add(btnConsultar);
 	}
